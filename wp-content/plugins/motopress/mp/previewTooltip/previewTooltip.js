@@ -1,0 +1,1 @@
+steal("jquery/class",function($){$.Class("MP.previewTooltip",{previewTooltip:function(){$(".motopress-show-hide-btn").tooltip({placement:"top",container:".motopress-helper-container"})}},{})});
