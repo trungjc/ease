@@ -44,13 +44,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<p class="form-row">
 				<?php wp_nonce_field( 'woocommerce-login' ); ?>
-				<input type="submit" class="button" name="login" value="<?php _e( 'Login', 'woocommerce' ); ?>" />
+				<input type="submit" class="button" name="login" value="<?php esc_attr_e( 'Login', 'woocommerce' ); ?>" />
 				<label for="rememberme" class="inline">
 					<input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <?php _e( 'Remember me', 'woocommerce' ); ?>
 				</label>
 			</p>
 			<p class="lost_password">
-				<a href="<?php echo esc_url( wc_lostpassword_url() ); ?>"><?php _e( 'Lost your password?', 'woocommerce' ); ?></a>
+				<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?', 'woocommerce' ); ?></a>
 			</p>
 
 			<?php do_action( 'woocommerce_login_form_end' ); ?>
@@ -68,69 +68,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<form method="post" class="register">
 
 			<?php do_action( 'woocommerce_register_form_start' ); ?>
-			
-			<div class="group-1">
-				<p class="form-row form-row-wide">
-						<label for="reg_username"><?php _e( 'First Name', 'woocommerce' ); ?> <?php _e( 'Last Name', 'woocommerce' ); ?><span class="required">*</span></label>
-						<input type="text" class="input-text" name="display_name" id="display_name" value="<?php if ( ! empty( $_POST['display_name'] ) ) echo esc_attr( $_POST['display_name'] ); ?>" />
-				</p>
-				
-				<?php if ( 'no' === get_option( 'woocommerce_registration_generate_username' ) ) : ?>
 
-					<p class="form-row form-row-wide">
-						<label for="reg_username"><?php _e( 'Username', 'woocommerce' ); ?> <span class="required">*</span></label>
-						<input type="text" class="input-text" name="username" id="reg_username" value="<?php if ( ! empty( $_POST['username'] ) ) echo esc_attr( $_POST['username'] ); ?>" />
-					</p>
-
-				<?php endif; ?>
+			<?php if ( 'no' === get_option( 'woocommerce_registration_generate_username' ) ) : ?>
 
 				<p class="form-row form-row-wide">
-					<label for="reg_email"><?php _e( 'Email address', 'woocommerce' ); ?> <span class="required">*</span></label>
-					<input type="email" class="input-text" name="email" id="reg_email" value="<?php if ( ! empty( $_POST['email'] ) ) echo esc_attr( $_POST['email'] ); ?>" />
+					<label for="reg_username"><?php _e( 'Username', 'woocommerce' ); ?> <span class="required">*</span></label>
+					<input type="text" class="input-text" name="username" id="reg_username" value="<?php if ( ! empty( $_POST['username'] ) ) echo esc_attr( $_POST['username'] ); ?>" />
 				</p>
 
-				<?php if ( 'no' === get_option( 'woocommerce_registration_generate_password' ) ) : ?>
+			<?php endif; ?>
 
-					<p class="form-row form-row-wide">
-						<label for="reg_password"><?php _e( 'Password', 'woocommerce' ); ?> <span class="required">*</span></label>
-						<input type="password" class="input-text" name="password" id="reg_password" />
-					</p>
+			<p class="form-row form-row-wide">
+				<label for="reg_email"><?php _e( 'Email address', 'woocommerce' ); ?> <span class="required">*</span></label>
+				<input type="email" class="input-text" name="email" id="reg_email" value="<?php if ( ! empty( $_POST['email'] ) ) echo esc_attr( $_POST['email'] ); ?>" />
+			</p>
 
-				<?php endif; ?>
-				
+			<?php if ( 'no' === get_option( 'woocommerce_registration_generate_password' ) ) : ?>
+
 				<p class="form-row form-row-wide">
-						<label for="reg_username"><?php _e( 'Giới Tính', 'woocommerce' ); ?><span class="required">*</span></label>
-						<select class="input-text" name="sex" id="sex">
-							<option value="1"><?php _e( 'Nam', 'woocommerce' ); ?></option>
-							<option value="0"><?php _e( 'Nữ', 'woocommerce' ); ?></option>
-						</select>
+					<label for="reg_password"><?php _e( 'Password', 'woocommerce' ); ?> <span class="required">*</span></label>
+					<input type="password" class="input-text" name="password" id="reg_password" />
 				</p>
-				
-				<!-- Spam Trap -->
-				<div style="<?php echo ( ( is_rtl() ) ? 'right' : 'left' ); ?>: -999em; position: absolute;"><label for="trap"><?php _e( 'Anti-spam', 'woocommerce' ); ?></label><input type="text" name="email_2" id="trap" tabindex="-1" /></div>
 
-				<?php do_action( 'woocommerce_register_form' ); ?>
-				<?php do_action( 'register_form' ); ?>
+			<?php endif; ?>
 
-				<p class="form-row">
-					<?php wp_nonce_field( 'woocommerce-register' ); ?>
-					<input type="submit" class="button" name="register" value="<?php _e( 'Register', 'woocommerce' ); ?>" />
-				</p>
-			</div>
-			<div class="group-2">
-				<p class="form-row form-row-wide" style="visibility: hidden;">
-						<label for="reg_password">&nbsp;</label>
-						<input type="password" class="input-text"/>
-				</p>
-				<p class="form-row form-row-wide" style="visibility: hidden;">
-						<label for="reg_password">&nbsp;</label>
-						<input type="password" class="input-text"/>
-				</p>
-				<p class="form-row form-row-wide">
-						<label for="reg_password"><?php _e( 'Nhập lại mật khẩu', 'woocommerce' ); ?> <span class="required">*</span></label>
-						<input type="password" class="input-text" name="re_password" id="re_reg_password" />
-				</p>
-			</div>
+			<!-- Spam Trap -->
+			<div style="<?php echo ( ( is_rtl() ) ? 'right' : 'left' ); ?>: -999em; position: absolute;"><label for="trap"><?php _e( 'Anti-spam', 'woocommerce' ); ?></label><input type="text" name="email_2" id="trap" tabindex="-1" /></div>
+
+			<?php do_action( 'woocommerce_register_form' ); ?>
+			<?php do_action( 'register_form' ); ?>
+
+			<p class="form-row">
+				<?php wp_nonce_field( 'woocommerce-register' ); ?>
+				<input type="submit" class="button" name="register" value="<?php esc_attr_e( 'Register', 'woocommerce' ); ?>" />
+			</p>
+
 			<?php do_action( 'woocommerce_register_form_end' ); ?>
 
 		</form>

@@ -17,7 +17,6 @@ if ( ! comments_open() ) {
 }
 
 ?>
-
 <div id="reviews">
 	<div id="comments">
 		<h2><?php
@@ -72,6 +71,10 @@ if ( ! comments_open() ) {
 						'logged_in_as'  => '',
 						'comment_field' => ''
 					);
+
+					if ( $account_page_url = wc_get_page_permalink( 'myaccount' ) ) {
+						$comment_form['must_log_in'] = '<p class="must-log-in">' .  sprintf( __( 'You must be <a href="%s">logged in</a> to post a review.', 'woocommerce' ), esc_url( $account_page_url ) ) . '</p>';
+					}
 
 					if ( get_option( 'woocommerce_enable_review_rating' ) === 'yes' ) {
 						$comment_form['comment_field'] = '<p class="comment-form-rating"><label for="rating">' . __( 'Your Rating', 'woocommerce' ) .'</label><select name="rating" id="rating">

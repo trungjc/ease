@@ -13,13 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-
-$content=null;
-ob_clean();
-ob_start();?>
+get_header( 'shop' ); ?>
 
 	<?php
-	
+
 		/**
 		 * woocommerce_before_main_content hook
 		 *
@@ -27,20 +24,45 @@ ob_start();?>
 		 * @hooked woocommerce_breadcrumb - 20
 		 */
 		//do_action( 'woocommerce_before_main_content' );
+		
 	?>
-	
-	<div class="row">
-	<div class="span9 right" id="content">
-	
+	<script>
+		$(document).ready(function(){
+			$(".products  li .wrapper .a-title h3").on({
+				mouseenter: function(e) { 
+					$(this).closest(".wrapper").addClass("wrapper-hover"); 
+				}
+			});
+			$(".products  li").on({
+				mouseleave: function(e) { 
+					$(this).find(".wrapper").removeClass("wrapper-hover"); 
+				}
+			});
+			
+		});
+		function showMsg(msg){
+			$(".well").html("Add "+msg+" To Cart successfully").show("slow",function(){setTimeout(function(){$(".well").hide("slow");},3000)});
+		}
+	</script>
+	<div class="col-md-12 product-bg">	
+		<div class="ahlu-box panel-1 col-md-10 center-no-center">
+			<div class="ahlu-body">
 		<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
 
 			<h1 class="page-title"><?php woocommerce_page_title(); ?></h1>
 
 		<?php endif; ?>
 
-		
-		
-		<?php do_action( 'woocommerce_archive_description' ); ?>
+		<?php
+			/**
+			 * woocommerce_archive_description hook
+			 *
+			 * @hooked woocommerce_taxonomy_archive_description - 10
+			 * @hooked woocommerce_product_archive_description - 10
+			 */
+			//do_action( 'woocommerce_archive_description' );
+			
+		?>
 
 		<?php if ( have_posts() ) : ?>
 
@@ -52,6 +74,8 @@ ob_start();?>
 				 * @hooked woocommerce_catalog_ordering - 30
 				 */
 				do_action( 'woocommerce_before_shop_loop' );
+				
+				
 			?>
 
 			<?php woocommerce_product_loop_start(); ?>
@@ -67,6 +91,7 @@ ob_start();?>
 			<?php woocommerce_product_loop_end(); ?>
 
 			<?php
+
 				/**
 				 * woocommerce_after_shop_loop hook
 				 *
@@ -80,19 +105,18 @@ ob_start();?>
 			<?php wc_get_template( 'loop/no-products-found.php' ); ?>
 
 		<?php endif; ?>
-	</div>
+
 	<?php
 		/**
 		 * woocommerce_after_main_content hook
 		 *
 		 * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
 		 */
-		//do_action( 'woocommerce_after_main_content' );
-		
-		 
-		
+		do_action( 'woocommerce_after_main_content' );
 	?>
-
+			</div>
+		</div>
+	</div>
 	<?php
 		/**
 		 * woocommerce_sidebar hook
@@ -100,26 +124,14 @@ ob_start();?>
 		 * @hooked woocommerce_get_sidebar - 10
 		 */
 		//do_action( 'woocommerce_sidebar' );
-			
 	?>
 
-<?php
-
-$content=ob_get_clean();
- $menuright = Ahlu::getObject("Blog_model");
- $template = Ahlu::Library("Template");
- $template->pathTheme = TEMPLATEPATH."/themes/default";
- $template->template = TEMPLATEPATH."/themes/default/default.php";
-			$template->assign("header",$template->load->view( $template->pathTheme."/compoment/header.php",null,true));
-
-			//$template->assign("content",$content);
-			$template->assign("content",$template->load->view(TEMPLATEPATH ."/includes/mvc/view/ahlu-home-shop.php",array("content"=>$content,"category"=>$menuright),true));
-		
-			$template->assign("footer",$template->load->view( $template->pathTheme."/compoment/footer.php",null,true));
-
-           //output html
-           $template->render(FALSE);
-		   
-
-
- ?>
+  <div class="woo-footer "><div class="container">
+     <a href="<?php echo get_site_url(); ?>/contact.html"> <img src="<?php bloginfo('template_directory');?>/images/contact.png" /></a>
+   
+     <h2>
+         Can’t find what you’re looking for?  We can order it in for you with <a href="<?php echo get_site_url(); ?>">EASE</a>!  Send us your enquiry now
+     </h2>
+ </div>
+ </div>
+<?php get_footer( 'shop' ); ?>
